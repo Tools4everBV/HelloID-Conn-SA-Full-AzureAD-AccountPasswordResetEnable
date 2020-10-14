@@ -1,0 +1,174 @@
+[
+    {
+      "label": "Select user account",
+      "fields": [
+        {
+          "key": "searchfield",
+          "templateOptions": {
+            "label": "Search",
+            "placeholder": "Username or email address"
+          },
+          "type": "input",
+          "summaryVisibility": "Hide element",
+          "requiresTemplateOptions": true
+        },
+        {
+          "key": "gridUsers",
+          "templateOptions": {
+            "label": "Select user",
+            "required": true,
+            "grid": {
+              "columns": [
+                {
+                  "headerName": "Display Name",
+                  "field": "displayName"
+                },
+                {
+                  "headerName": "Description",
+                  "field": "Description"
+                },
+                {
+                  "headerName": "User Principal Name",
+                  "field": "UserPrincipalName"
+                },
+                {
+                  "headerName": "Sam Account Name",
+                  "field": "SamAccountName"
+                },
+                {
+                  "headerName": "Company",
+                  "field": "Company"
+                },
+                {
+                  "headerName": "Department",
+                  "field": "Department"
+                },
+                {
+                  "headerName": "Title",
+                  "field": "Title"
+                }
+              ],
+              "height": 300,
+              "rowSelection": "single"
+            },
+            "dataSourceConfig": {
+              "dataSourceGuid": "f487e453-dddb-431a-8b6a-08d81d8f7d8e",
+              "input": {
+                "propertyInputs": [
+                  {
+                    "propertyName": "searchUser",
+                    "otherFieldValue": {
+                      "otherFieldKey": "searchfield"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "type": "grid",
+          "summaryVisibility": "Show",
+          "requiresTemplateOptions": true
+        }
+      ]
+    },
+    {
+      "label": "Reset password",
+      "fields": [
+        {
+          "key": "gridDetails",
+          "templateOptions": {
+            "label": "Basic attributes",
+            "required": false,
+            "grid": {
+              "columns": [
+                {
+                  "headerName": "Name",
+                  "field": "name"
+                },
+                {
+                  "headerName": "Value",
+                  "field": "value"
+                }
+              ],
+              "height": 350,
+              "rowSelection": "single"
+            },
+            "dataSourceConfig": {
+              "dataSourceGuid": "79bc5f1a-9b46-49c4-8b6b-08d81d8f7d8e",
+              "input": {
+                "propertyInputs": [
+                  {
+                    "propertyName": "selectedUser",
+                    "otherFieldValue": {
+                      "otherFieldKey": "gridUsers"
+                    }
+                  }
+                ]
+              }
+            },
+            "useFilter": false
+          },
+          "type": "grid",
+          "summaryVisibility": "Hide element",
+          "requiresTemplateOptions": true
+        },
+        {
+          "key": "blnreset",
+          "templateOptions": {
+            "label": "Reset password",
+            "useSwitch": true,
+            "checkboxLabel": " "
+          },
+          "type": "boolean",
+          "defaultValue": true,
+          "summaryVisibility": "Show",
+          "requiresTemplateOptions": true
+        },
+        {
+          "key": "password",
+          "templateOptions": {
+            "label": "Password",
+            "useDataSource": true,
+            "displayField": "password",
+            "dataSourceConfig": {
+              "dataSourceGuid": "a35120ea-8451-462d-9e4d-08d837c19e95",
+              "input": {
+                "propertyInputs": []
+              }
+            },
+            "useDependOn": false,
+            "dependOn": "searchfield"
+          },
+          "hideExpression": "!model[\"blnreset\"]",
+          "type": "password",
+          "summaryVisibility": "Show",
+          "requiresTemplateOptions": true
+        },
+        {
+          "key": "blnchangenextsignin",
+          "templateOptions": {
+            "label": "Change password at next sign in",
+            "useSwitch": true,
+            "checkboxLabel": ""
+          },
+          "hideExpression": "!model[\"blnreset\"]",
+          "type": "boolean",
+          "defaultValue": true,
+          "summaryVisibility": "Show",
+          "requiresTemplateOptions": true
+        },
+        {
+          "key": "blnenable",
+          "templateOptions": {
+            "label": "Enable account",
+            "useSwitch": true,
+            "checkboxLabel": ""
+          },
+          "type": "boolean",
+          "defaultValue": true,
+          "summaryVisibility": "Show",
+          "requiresTemplateOptions": true
+        }
+      ]
+    }
+  ]
