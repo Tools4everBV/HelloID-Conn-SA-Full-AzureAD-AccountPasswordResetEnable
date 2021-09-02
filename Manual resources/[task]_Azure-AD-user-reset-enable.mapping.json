@@ -1,0 +1,22 @@
+[
+    {
+        "name":  "blnchangenextsignin",
+        "value":  "{{form.blnchangenextsignin}}"
+    },
+    {
+        "name":  "blnenable",
+        "value":  "{{form.blnenable}}"
+    },
+    {
+        "name":  "blnreset",
+        "value":  "{{form.blnreset}}"
+    },
+    {
+        "name":  "password",
+        "value":  "{{form.password}}"
+    },
+    {
+        "name":  "userPrincipalName",
+        "value":  "{{form.gridUsers.UserPrincipalName}}"
+    }
+]
