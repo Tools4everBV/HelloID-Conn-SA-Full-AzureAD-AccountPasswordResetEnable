@@ -9,6 +9,12 @@ This HelloID Service Automation Delegated Form can reset the password of and/or 
  3. Optional, Select the switch for Enable account
  3. After confirmation the password is reset and optionally, the user is enabled
 
+## Versioning
+| Version | Description | Date |
+| - | - | - |
+| 1.0.1   | Added version number and updated all-in-one script | 2021/11/08  |
+| 1.0.0   | Initial release | 2021/09/02  |
+
 <!-- Requirements -->
 ## Requirements
 This script uses the Microsoft Graph API and requires an App Registration with App permissions:
@@ -108,6 +114,8 @@ This Delegated Form uses the following resources in order to run
 
 ### Delegated form task 'Azure-AD-user-reset-enable'
 
-# HelloID Docs
-The official HelloID documentation can be found at: https://docs.helloid.com/
+## Getting help
+_If you need help, feel free to ask questions on our [forum](https://forum.helloid.com/forum/helloid-connectors/service-automation/194-helloid-sa-azure-ad-reset-password-enable-user)_
 
+## HelloID Docs
+The official HelloID documentation can be found at: https://docs.helloid.com/
