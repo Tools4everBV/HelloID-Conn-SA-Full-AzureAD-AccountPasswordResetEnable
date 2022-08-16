@@ -12,6 +12,7 @@ This HelloID Service Automation Delegated Form can reset the password of and/or 
 ## Versioning
 | Version | Description | Date |
 | - | - | - |
+| 1.0.2   | Added version number and updated code for SA-agent and auditlogging | 2022/08/16  |
 | 1.0.1   | Added version number and updated all-in-one script | 2021/11/08  |
 | 1.0.0   | Initial release | 2021/09/02  |
 
@@ -85,6 +86,15 @@ There are multiple ways to authenticate to the Graph API with each has its own p
 *	It's IMPORTANT to copy the newly generated client secret, because you cannot see the value anymore after you close the page.
 *	At least we need to get is the <b>Tenant ID</b>. This can be found in the Azure Portal by going to <b>Azure Active Directory > Custom Domain Names</b>, and then finding the .onmicrosoft.com domain.
 
+### Password Reset Permissions
+Additionally you might need to add the User administrator role
+
+*	From the Azure Portal, Under Manage, select Roles and administrators.
+*	Select the application we have created before, and select "<b>Certificates and Secrets</b>". 
+*	Search and select the User administrator role.
+*	Select Add assignments.
+*	In the Select text box, enter the name or the ID of the application you registered earlier. When it appears in the search results, select your application.
+*	Select Add. It might take a few minutes to for the permissions to fully propagate
 
 ## All-in-one PowerShell setup script
 The PowerShell script "createform.ps1" contains a complete PowerShell script using the HelloID API to create the complete Form including user defined variables, tasks and data sources.
@@ -112,7 +122,7 @@ This Delegated Form uses the following resources in order to run
 
 ### Powershell data source 'Azure-AD-User-Reset-Password-generate-table-wildcard'
 
-### Delegated form task 'Azure-AD-user-reset-enable'
+### Delegated form task 'Azure AD Account - Reset password & Unlock'
 
 ## Getting help
 _If you need help, feel free to ask questions on our [forum](https://forum.helloid.com/forum/helloid-connectors/service-automation/194-helloid-sa-azure-ad-reset-password-enable-user)_
