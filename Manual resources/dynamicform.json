@@ -23,7 +23,7 @@
                                                                 "columns":  [
                                                                                 {
                                                                                     "headerName":  "Display Name",
-                                                                                    "field":  "displayName"
+                                                                                    "field":  "DisplayName"
                                                                                 },
                                                                                 {
                                                                                     "headerName":  "User Principal Name",
@@ -35,7 +35,7 @@
                                                                                 },
                                                                                 {
                                                                                     "headerName":  "Department",
-                                                                                    "field":  "department"
+                                                                                    "field":  "Department"
                                                                                 },
                                                                                 {
                                                                                     "headerName":  "Company",
@@ -78,12 +78,12 @@
                                                    "grid":  {
                                                                 "columns":  [
                                                                                 {
-                                                                                    "headerName":  "Value",
-                                                                                    "field":  "value"
-                                                                                },
-                                                                                {
                                                                                     "headerName":  "Name",
                                                                                     "field":  "name"
+                                                                                },
+                                                                                {
+                                                                                    "headerName":  "Value",
+                                                                                    "field":  "value"
                                                                                 }
                                                                             ],
                                                                 "height":  350,

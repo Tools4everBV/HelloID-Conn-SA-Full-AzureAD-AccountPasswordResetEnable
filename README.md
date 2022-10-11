@@ -12,6 +12,7 @@ This HelloID Service Automation Delegated Form can reset the password of and/or 
 ## Versioning
 | Version | Description | Date |
 | - | - | - |
+| 1.0.2   | Updated to use id instead of upn to get correct user | 2022/10/11  |
 | 1.0.2   | Added version number and updated code for SA-agent and auditlogging | 2022/08/16  |
 | 1.0.1   | Added version number and updated all-in-one script | 2021/11/08  |
 | 1.0.0   | Initial release | 2021/09/02  |
@@ -19,23 +20,36 @@ This HelloID Service Automation Delegated Form can reset the password of and/or 
 <!-- Requirements -->
 ## Requirements
 This script uses the Microsoft Graph API and requires an App Registration with App permissions:
-*	Read and Write all user’s full profiles by using <b><i>User.ReadWrite.All</i></b>
-*	Read and Write all groups in an organization’s directory by using <b><i>Group.ReadWrite.All</i></b>
-*	Read and Write data to an organization’s directory by using <b><i>Directory.ReadWrite.All</i></b>
- 
+*	Read and Write all user’s full profiles by using *__User.ReadWrite.All__*
+*	Read and Write all groups in an organization’s directory by using *__Group.ReadWrite.All__*
+*	Read and Write data to an organization’s directory by using *__Directory.ReadWrite.All__*
+
+Apart from the App Permissions, to reset a password one fo the following roles (from least to most privileged) is requires as well:
+*	*__Helpdesk (Password) administrator__*
+*	*__User Administrator__*
+*	*__Global Administrator__*
+
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
-* [Description](#description)
-* [Requirements](#requirements)
-* [Introduction](#introduction)
-* [Getting the Azure AD graph API access](#getting-the-azure-ad-graph-api-access)
-  * [Application Registration](#application-registration)
-  * [Configuring App Permissions](#configuring-app-permissions)
-  * [Authentication and Authorization](#authentication-and-authorization)
-* [All-in-one PowerShell setup script](#all-in-one-powershell-setup-script)
-  * [Getting started](#getting-started)
-* [Post-setup configuration](#post-setup-configuration)
-* [Manual resources](#manual-resources)
+- [Description](#description)
+- [Versioning](#versioning)
+- [Requirements](#requirements)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Getting the Azure AD graph API access](#getting-the-azure-ad-graph-api-access)
+  - [Application Registration](#application-registration)
+  - [Configuring App Permissions](#configuring-app-permissions)
+  - [Authentication and Authorization](#authentication-and-authorization)
+  - [Password Reset Permissions](#password-reset-permissions)
+- [All-in-one PowerShell setup script](#all-in-one-powershell-setup-script)
+  - [Getting started](#getting-started)
+- [Post-setup configuration](#post-setup-configuration)
+- [Manual resources](#manual-resources)
+  - [Powershell data source 'Azure-AD-User-Reset-Password-generate-table-attributes-basic'](#powershell-data-source-azure-ad-user-reset-password-generate-table-attributes-basic)
+  - [Powershell data source 'Azure-AD-User-Reset-Password-generate-table-wildcard'](#powershell-data-source-azure-ad-user-reset-password-generate-table-wildcard)
+  - [Delegated form task 'Azure AD Account - Reset password & Unlock'](#delegated-form-task-azure-ad-account---reset-password--unlock)
+- [Getting help](#getting-help)
+- [HelloID Docs](#helloid-docs)
 
 
 ## Introduction
@@ -47,50 +61,50 @@ The interface to communicate with Microsoft Azure AD is through the Microsoft Gr
 By using this connector you will have the ability to reset the password of and/or enable an Azure AD User.
 
 ### Application Registration
-The first step to connect to Graph API and make requests, is to register a new <b>Azure Active Directory Application</b>. The application is used to connect to the API and to manage permissions.
+The first step to connect to Graph API and make requests, is to register a new __Azure Active Directory Application__. The application is used to connect to the API and to manage permissions.
 
-* Navigate to <b>App Registrations</b> in Azure, and select “New Registration” (<b>Azure Portal > Azure Active Directory > App Registration > New Application Registration</b>).
-* Next, give the application a name. In this example we are using “<b>HelloID PowerShell</b>” as application name.
-* Specify who can use this application (<b>Accounts in this organizational directory only</b>).
+* Navigate to __App Registrations__ in Azure, and select “New Registration” (__Azure Portal > Azure Active Directory > App Registration > New Application Registration__).
+* Next, give the application a name. In this example we are using “__HelloID PowerShell__” as application name.
+* Specify who can use this application (__Accounts in this organizational directory only__).
 * Specify the Redirect URI. You can enter any url as a redirect URI value. In this example we used http://localhost because it doesn't have to resolve.
-* Click the “<b>Register</b>” button to finally create your new application.
+* Click the “__Register__” button to finally create your new application.
 
 Some key items regarding the application are the Application ID (which is the Client ID), the Directory ID (which is the Tenant ID) and Client Secret.
 
 ### Configuring App Permissions
 The [Microsoft Graph documentation](https://docs.microsoft.com/en-us/graph) provides details on which permission are required for each permission type.
 
-To assign your application the right permissions, navigate to <b>Azure Portal > Azure Active Directory >App Registrations</b>.
-Select the application we created before, and select “<b>API Permissions</b>” or “<b>View API Permissions</b>”.
-To assign a new permission to your application, click the “<b>Add a permission</b>” button.
-From the “<b>Request API Permissions</b>” screen click “<b>Microsoft Graph</b>”.
-For this connector the following permissions are used as <b>Application permissions</b>:
-*	Read and Write all user’s full profiles by using <b><i>User.ReadWrite.All</i></b>
-*	Read and Write all groups in an organization’s directory by using <b><i>Group.ReadWrite.All</i></b>
-*	Read and Write data to an organization’s directory by using <b><i>Directory.ReadWrite.All</i></b>
+To assign your application the right permissions, navigate to __Azure Portal > Azure Active Directory >App Registrations__.
+Select the application we created before, and select “__API Permissions__” or “__View API Permissions__”.
+To assign a new permission to your application, click the “__Add a permission__” button.
+From the “__Request API Permissions__” screen click “__Microsoft Graph__”.
+For this connector the following permissions are used as __Application permissions__:
+*	Read and Write all user’s full profiles by using *__User.ReadWrite.All__*
+*	Read and Write all groups in an organization’s directory by using *__Group.ReadWrite.All__*
+*	Read and Write data to an organization’s directory by using *__Directory.ReadWrite.All__*
 
 Some high-privilege permissions can be set to admin-restricted and require an administrators consent to be granted.
 
-To grant admin consent to our application press the “<b>Grant admin consent for TENANT</b>” button.
+To grant admin consent to our application press the “__Grant admin consent for TENANT__” button.
 
 ### Authentication and Authorization
 There are multiple ways to authenticate to the Graph API with each has its own pros and cons, in this example we are using the Authorization Code grant type.
 
-*	First we need to get the <b>Client ID</b>, go to the <b>Azure Portal > Azure Active Directory > App Registrations</b>.
+*	First we need to get the __Client ID__, go to the __Azure Portal > Azure Active Directory > App Registrations__.
 *	Select your application and copy the Application (client) ID value.
-*	After we have the Client ID we also have to create a <b>Client Secret</b>.
-*	From the Azure Portal, go to <b>Azure Active Directory > App Registrations</b>.
-*	Select the application we have created before, and select "<b>Certificates and Secrets</b>". 
-*	Under “Client Secrets” click on the “<b>New Client Secret</b>” button to create a new secret.
+*	After we have the Client ID we also have to create a __Client Secret__.
+*	From the Azure Portal, go to __Azure Active Directory > App Registrations__.
+*	Select the application we have created before, and select "__Certificates and Secrets__". 
+*	Under “Client Secrets” click on the “__New Client Secret__” button to create a new secret.
 *	Provide a logical name for your secret in the Description field, and select the expiration date for your secret.
 *	It's IMPORTANT to copy the newly generated client secret, because you cannot see the value anymore after you close the page.
-*	At least we need to get is the <b>Tenant ID</b>. This can be found in the Azure Portal by going to <b>Azure Active Directory > Custom Domain Names</b>, and then finding the .onmicrosoft.com domain.
+*	At least we need to get is the __Tenant ID__. This can be found in the Azure Portal by going to __Azure Active Directory > Custom Domain Names__, and then finding the .onmicrosoft.com domain.
 
 ### Password Reset Permissions
 Additionally you might need to add the User administrator role
 
 *	From the Azure Portal, Under Manage, select Roles and administrators.
-*	Select the application we have created before, and select "<b>Certificates and Secrets</b>". 
+*	Select the application we have created before, and select "__Certificates and Secrets__". 
 *	Search and select the User administrator role.
 *	Select Add assignments.
 *	In the Select text box, enter the name or the ID of the application you registered earlier. When it appears in the search results, select your application.
